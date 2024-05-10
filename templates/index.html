@@ -1,7 +1,44 @@
 {% extends 'base.html' %}
 
-{% block head %} <title> Housing Price Prediction </title>{% endblock %}
+{% block head %}
+    <title>Housing Price Prediction</title>
+{% endblock %}
 
-{% block body%}
-    <h1> Housing Price Prediction </h1>
+{% block body %}
+    <div class="header">
+        <h1>Housing Price Prediction</h1>
+    </div>
+
+    <form class="form" action="/" method="POST">
+        <label for="square_feet">Square Feet</label>
+        <input type="number" name="square_feet" required>
+        <br>
+        <label for="bedrooms">Bedrooms</label>
+        <select name="bedrooms">
+            <option value="two">2</option>
+            <option value="three">3</option>
+            <option value="four">4</option>
+            <option value="five">5</option>
+        </select>
+        <br>
+        <label for="bathrooms">Bathrooms</label>
+        <select name="bathrooms">
+            <option value="one">1</option>
+            <option value="two">2</option>
+            <option value="three">3</option>
+        </select>
+        <br>
+        <label for="neighborhood">Neighborhood</label>
+        <select name="neighborhood">
+            <option value="suburb">Suburb</option>
+            <option value="rural">Rural</option>
+            <option value="urban">Urban</option>
+        </select>
+        <br>
+        <label for="year">Year (1950 - 2021)</label>
+        <input type="number" name="year" min="1950" max="2021" value="2021" required>
+        <br>
+        <input type="reset" value="Clear">
+        <input type="submit" value="Predict">
+    </form>
 {% endblock %}
