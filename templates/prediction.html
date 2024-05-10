@@ -5,18 +5,24 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Prediction</h1>
-    <h4>Features</h4>
-    <p>Square Feet: {{ square_feet }}</p>
-    <p>Bedrooms: {{ bedrooms }}</p>
-    <p>Bathrooms: {{ bathrooms }}</p>
-    <p>Neighborhood: {{ neighborhood }}</p>
-    <p>Year: {{ year }}</p>
+    <div class="header">
+        <h1>Prediction</h1>
+    </div>
+    <div class="result">
+        <h2>Features</h2>
+        <p><strong>Square Feet:</strong> {{ square_feet }}</p>
+        <p><strong>Bedrooms:</strong> {{ bedrooms }}</p>
+        <p><strong>Bathrooms:</strong> {{ bathrooms }}</p>
+        <p><strong>Neighborhood:</strong> {{ neighborhood }}</p>
+        <p><strong>Year:</strong> {{ year }}</p>
+    </div>
 
-    <h4>Result</h4>
-    <p>Price Prediction: ${{ prediction }}</p>
+    <div class="result">
+        <h2>Result</h2>
+        <p><strong>Price Prediction:</strong> ${{ prediction}}</p>
+    </div>
 
-    <form action="{{ url_for('index') }}" method="GET">
+    <form class="form" action="{{ url_for('index') }}" method="GET">
         <button type="submit">Make Another Prediction</button>
     </form>
 {% endblock %}

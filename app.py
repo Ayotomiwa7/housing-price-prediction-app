@@ -27,7 +27,7 @@ def predict():
             bathrooms = int(request.form['bathrooms'])
             neighborhood = request.form['neighborhood']
             year = int(request.form['year'])
-        except:
+        except ValueError:
             return 'Invalid input. Please enter numerical values for square feet, bedrooms, bathrooms, and year.'
 
         neighborhood_encoded = encoder.transform([[neighborhood]])
