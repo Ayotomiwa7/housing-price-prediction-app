@@ -1,14 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pickle
 from sklearn.preprocessing import OneHotEncoder
+import pandas as pd
 
 app = Flask(__name__)
 
-# Load the model and encoder
 with open('housing_price_pred_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-encoder = OneHotEncoder(categories=[['suburb', 'rural', 'urban']])
+encoder = OneHotEncoder(categories=[['rural', 'suburb', 'urban']])
+encoder.fit([['rural'], ['suburb'], ['urban']])
+feature_names = ['SquareFeet', 'Bedrooms', 'Bathrooms', 'YearBuilt', 'Neighborhood_Rural', 'Neighborhood_Suburb', 'Neighborhood_Urban']
 
 
 @app.route('/')
@@ -19,19 +21,32 @@ def index():
 @app.route('/predict', methods=['POST', 'GET'])
 def predict():
     if request.method == "POST":
-        square_feet = int(request.form['square_feet'])
-        bedrooms = int(request.form['bedrooms'])
-        bathrooms = int(request.form['bathrooms'])
-        neighborhood = request.form['neighborhood']
-        year = int(request.form['year'])
-
-        encoder.fit([['suburb'], ['rural'], ['urban']])
+        try:
+            square_feet = int(request.form['square_feet'])
+            bedrooms = int(request.form['bedrooms'])
+            bathrooms = int(request.form['bathrooms'])
+            neighborhood = request.form['neighborhood']
+            year = int(request.form['year'])
+        except:
+            return 'Invalid input. Please enter numerical values for square feet, bedrooms, bathrooms, and year.'
 
         neighborhood_encoded = encoder.transform([[neighborhood]])
 
-        prediction = model.predict([[square_feet, bedrooms, bathrooms, *neighborhood_encoded.toarray()[0], year]])
+        data = {
+            'SquareFeet': [square_feet],
+            'Bedrooms': [bedrooms],
+            'Bathrooms': [bathrooms],
+            'YearBuilt': [year],
+            'Neighborhood_Rural': neighborhood_encoded[0, 0],
+            'Neighborhood_Suburb': neighborhood_encoded[0, 1],
+            'Neighborhood_Urban': neighborhood_encoded[0, 2]
+        }
+        df = pd.DataFrame(data, columns=feature_names)
 
-        return f"prediction: {prediction}"
+        prediction = model.predict(df)
+        prediction = round(prediction[0], 3)
+
+        return render_template('prediction.html', square_feet= square_feet, bedrooms= bedrooms, bathrooms= bathrooms, neighborhood= neighborhood, year= year, prediction= prediction)
 
     return redirect(url_for('index'))
 

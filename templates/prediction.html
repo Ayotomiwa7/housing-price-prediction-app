@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
 
-{% block head %} <title> Housing Price Prediction </title>{% endblock %}
+{% block head %}
+    <title>Housing Price Prediction</title>
+{% endblock %}
 
-{% block body%}
-    
+{% block body %}
+    <h1>Prediction</h1>
+    <h4>Features</h4>
+    <p>Square Feet: {{ square_feet }}</p>
+    <p>Bedrooms: {{ bedrooms }}</p>
+    <p>Bathrooms: {{ bathrooms }}</p>
+    <p>Neighborhood: {{ neighborhood }}</p>
+    <p>Year: {{ year }}</p>
+
+    <h4>Result</h4>
+    <p>Price Prediction: ${{ prediction }}</p>
+
+    <form action="{{ url_for('index') }}" method="GET">
+        <button type="submit">Make Another Prediction</button>
+    </form>
 {% endblock %}
